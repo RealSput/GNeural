@@ -1,10 +1,11 @@
 import { float_counter } from '@g-js-api/g.js/lib/counter.js';
-import MLP from './mlp-working.js';
+import MLP from './mlp.js';
 let wait_time = 1/240;
 class MLPDense extends MLP {
     constructor(inputNeurons, hiddenNeurons, outputNeurons) {
         // Call the parent constructor with a temporary hidden layer size
         super(inputNeurons, Array.isArray(hiddenNeurons) ? hiddenNeurons[0] : hiddenNeurons, outputNeurons);
+        this.hasMultipleDenseLayers = Array.isArray(hiddenNeurons);
 
         // CHANGE: Store the hidden layer configuration
         this.hiddenLayersConfig = Array.isArray(hiddenNeurons) ? hiddenNeurons : [hiddenNeurons];
@@ -137,7 +138,7 @@ class MLPDense extends MLP {
     }
 
     // CHANGE: Add L2 regularization and noise
-    train(trainingData, iterations, learningRate = 0.001, regularizationRate = 0.01, noiseLevel = 0.1) {
+    train(trainingData, iterations, learningRate = 0.001, regularizationRate = 0.01, noiseLevel = 0.01) {
         for (let i = 0; i < iterations; i++) {
             for (const data of trainingData) {
                 // Add some noise to inputs

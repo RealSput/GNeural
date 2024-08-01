@@ -202,7 +202,7 @@ class MLP {
         }
     }
 
-    predict(input) {
+    predict(...input) {
 		this.GD_feedForward(input);
 		return {
             input: this.inputNeuronCounters,
