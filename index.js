@@ -1,5 +1,5 @@
-import MLP from './mlp.js';
-import MLPDense from './mlp-dense.js';
+import MLP from './architectures/mlp.js';
+import MLPDense from './architectures/mlp-dense.js';
 export {
     MLP,
     MLPDense
