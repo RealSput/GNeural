@@ -1,6 +1,15 @@
 import MLP from './mlp.js';
-let wait_time = 1/240;
-
+let gapnum = 0;
+let gap = () => {
+    let currCtx = Context.findByName(Context.current);
+    let lastObj = currCtx.objects[currCtx.objects.length - 1];
+    if (!lastObj?.X) {
+        lastObj.X = gapnum;
+        return;
+    }
+    lastObj.X += gapnum;
+    gapnum += 1;
+}
 class MLPDense extends MLP {
     constructor(inputNeurons, hiddenNeurons, outputNeurons) {
         super(inputNeurons, Array.isArray(hiddenNeurons) ? hiddenNeurons[0] : hiddenNeurons, outputNeurons);
@@ -48,11 +57,11 @@ class MLPDense extends MLP {
             const bias = this.biasHidden[layer];
             for (let i = 0; i < this.hiddenLayersConfig[layer]; i++) {
                 for (let j = 0; j < input.length; j++) {
-                    $.add(item_edit(input[j].item, 0, this.hiddenOutputCounters[layer][i].item, TIMER, NONE, TIMER, ADD, MUL, NONE, weights[j][i]).with(obj_props.X, 75).with(obj_props.Y, 145));
+                    $.add(item_edit(input[j].item, 0, this.hiddenOutputCounters[layer][i].item, TIMER, NONE, TIMER, ADD, MUL, NONE, weights[j][i]));
                 }
                 this.hiddenOutputCounters[layer][i].add(bias[i]);
-                wait(wait_time);
                 compare(this.hiddenOutputCounters[layer][i], LESS, 0, trigger_function(() => this.hiddenOutputCounters[layer][i].set(0)));
+                gap();
             }
         }
     }
@@ -73,12 +82,12 @@ class MLPDense extends MLP {
         const lastHiddenLayer = this.hiddenOutputCounters[this.hiddenOutputs.length - 1];
         for (let i = 0; i < this.outputNeurons; i++) {
             for (let j = 0; j < lastHiddenLayer.length; j++) {
-                $.add(item_edit(lastHiddenLayer[j].item, 0, this.outputOutputCounters[i].item, TIMER, TIMER, TIMER, ADD, MUL, NONE, this.weightsHiddenOutput[j][i]).with(obj_props.X, 145).with(obj_props.Y, 145));
+                $.add(item_edit(lastHiddenLayer[j].item, 0, this.outputOutputCounters[i].item, TIMER, TIMER, TIMER, ADD, MUL, NONE, this.weightsHiddenOutput[j][i]));
             }
-            wait(wait_time);
             this.outputOutputCounters[i].add(this.biasOutput[i]);
-            wait(wait_time);
+            gap();
             compare(this.outputOutputCounters[i], LESS, 0, trigger_function(() => this.outputOutputCounters[i].set(0)));
+            gap();
         }
     }
 
@@ -113,12 +122,12 @@ class MLPDense extends MLP {
     GD_feedForward(inputData) {
         if (!this.feedForwardFunction) this.feedForwardFunction = trigger_function(() => {
             this.GD_passThroughHiddenLayers();
-            wait(wait_time);
+            gap();
             this.GD_passThroughOutputLayer();
         });
         this.GD_setInputData(inputData);
-        wait(wait_time);
         this.feedForwardFunction.call();
+        gap();
     }
 
     train(trainingData, iterations, learningRate = 0.001, regularizationRate = 0.01, noiseLevel = 0.01) {

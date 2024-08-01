@@ -1,4 +1,14 @@
 let wait_time = 1/240;
+let gapnum = 0;
+let gap = () => {
+    let currCtx = Context.findByName(Context.current);
+    let lastObj = currCtx.objects[currCtx.objects.length - 1];
+    if (!lastObj?.X) {
+        lastObj.X = gapnum++;
+        return;
+    }
+    lastObj.X += gapnum++;
+}
 class MLP {
     constructor(inputNeurons, hiddenNeurons, outputNeurons) {
         this.inputNeurons = inputNeurons;
@@ -76,13 +86,13 @@ class MLP {
     GD_passThroughHiddenLayer() {
         for (let i = 0; i < this.hiddenNeurons; i++) {
             for (let j = 0; j < this.inputNeurons; j++) {
-                $.add(item_edit(this.inputNeuronCounters[j].item, 0, this.hiddenOutputCounters[i].item, TIMER, NONE, TIMER, ADD, MUL, NONE, this.weightsInputHidden[j][i]).with(obj_props.X, 75).with(obj_props.Y, 145));
+                $.add(item_edit(this.inputNeuronCounters[j].item, 0, this.hiddenOutputCounters[i].item, TIMER, NONE, TIMER, ADD, MUL, NONE, this.weightsInputHidden[j][i]));
             }
             this.hiddenOutputCounters[i].add(this.biasHidden[i]);
-            wait(wait_time);
             $.add(item_comp(this.hiddenOutputCounters[i].item, 0, TIMER, NONE, LESS, trigger_function(() => {
                 this.hiddenOutputCounters[i].set(0);
             }), undefined, 1, 0));
+            gap();
         }
     }
 
@@ -111,16 +121,14 @@ class MLP {
     GD_passThroughOutputLayer() {
         for (let i = 0; i < this.outputNeurons; i++) {
             for (let j = 0; j < this.hiddenNeurons; j++) {
-                $.add(item_edit(this.hiddenOutputCounters[j].item, 0, this.outputOutputCounters[i].item, TIMER, TIMER, TIMER, ADD, MUL, NONE, this.weightsHiddenOutput[j][i]).with(obj_props.X, 145).with(obj_props.Y, 145));
+                $.add(item_edit(this.hiddenOutputCounters[j].item, 0, this.outputOutputCounters[i].item, TIMER, TIMER, TIMER, ADD, MUL, NONE, this.weightsHiddenOutput[j][i]));
             }
-            wait(wait_time);
             this.outputOutputCounters[i].add(this.biasOutput[i]);
-            wait(wait_time);
+            gap();
             $.add(item_comp(this.outputOutputCounters[i].item, 0, TIMER, NONE, LESS, trigger_function(() => {
                 this.outputOutputCounters[i].set(0);
             }), undefined, 1, 0).with(obj_props.Y, 105));
-            wait(wait_time);
-            $.add(item_edit(undefined, undefined, this.outputOutputCounters[i].item, NONE, NONE, TIMER, MUL, NONE, NONE, 1, NONE, NONE, NONE, RND).with(obj_props.X, 115).with(obj_props.Y, 145)); // rounds this.outputOutputCounters[i] + does absolute
+            gap();
         }
     }
 
@@ -132,7 +140,7 @@ class MLP {
 
     GD_feedForward(inputData) {
         // this.GD_setInputData(inputData);
-        // wait(wait_time)
+        // gap()
         this.GD_passThroughHiddenLayer();
         this.GD_passThroughOutputLayer();
     }
