@@ -10,7 +10,7 @@
   "license": "ISC",
   "type": "module",
   "description": "A JavaScript library that allows you to easily create, train & run neural networks inside of Geometry Dash.",
-  "dependencies": {
+  "devDependencies": {
     "@g-js-api/g.js": "^4.1.1"
   }
 }

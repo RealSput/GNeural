@@ -1,4 +1,3 @@
-import { float_counter } from '@g-js-api/g.js/lib/counter.js';
 import MLP from './mlp.js';
 let wait_time = 1/240;
 
