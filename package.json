@@ -1,15 +1,15 @@
 {
-  "name": "g.js-neural",
+  "name": "gneural",
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "bestgamer08",
   "license": "ISC",
   "type": "module",
-  "description": "",
+  "description": "A JavaScript library that allows you to easily create, train & run neural networks inside of Geometry Dash.",
   "dependencies": {
     "@g-js-api/g.js": "^4.1.1"
   }

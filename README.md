@@ -8,7 +8,7 @@ import { MLPDense } from 'gneural';
 
 // G.js export setup
 await $.exportConfig({
-    type: 'live_editor',
+    type: 'savefile', // you can also use 'live_editor' if you can use WSLiveEditor
     options: {
         info: true,
         optimize: false
