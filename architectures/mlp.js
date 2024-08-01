@@ -1,4 +1,3 @@
-let wait_time = 1/240;
 let gapnum = 0;
 let gap = () => {
     let currCtx = Context.findByName(Context.current);
