@@ -27,7 +27,7 @@ const trainingData = [
 // you can also provide a plain integer for second argument to create a singular dense layer
 // or use the normal MLP class for singular hidden layer
 const mlp = new MLPDense(2, [4, 3], 1); 
-mlp.train(trainingData, 10000, 0.01); // Pre-trains the neural network before importing weights and biases into GD
+mlp.train(trainingData, 1000, 0.01); // Pre-trains the neural network before importing weights and biases into GD
 
 // Test that your neural network works as expected
 mlp.feedForward([1, 2]);
